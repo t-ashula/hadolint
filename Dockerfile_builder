@@ -18,7 +18,7 @@ WORKDIR /usr/src/hadolint
 COPY hadolint.cabal .
 RUN cabal update && cabal install --only-dependencies --enable-tests
 
-# Copy the rest of the source files, including ShellCheck.cabal again but doesn't matter
+# Copy the rest of the source files, including hadolint.cabal again but doesn't matter
 COPY . .
 
 # Build
@@ -42,7 +42,7 @@ RUN echo "export PATH=${PATH}" >>  /etc/profile
 # # Extract Binaries
 # # ------------------------------------------------------------
 
-# Get shellcheck binary
+# Get hadolint binary
 RUN mkdir -p /package/bin/
 RUN cp $(which hadolint) /package/bin/
 
@@ -51,5 +51,5 @@ RUN mkdir -p /package/lib/
 RUN ldd $(which hadolint) | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' /package/lib/
 
 
-# Copy shellcheck package out to mounted directory
+# Copy hadolint package out to mounted directory
 CMD ["cp", "-avr", "/package", "/mnt/"]
